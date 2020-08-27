@@ -2,8 +2,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using HearthDb.Enums;
 using HearthMirror;
@@ -529,6 +531,20 @@ namespace Hearthstone_Deck_Tracker
 				else if (_game.IsBattlegroundsMatch && _game.BattlegroundsRatingInfo != null)
 				{
 					_game.CurrentGameStats.BattlegroundsRating = _game.BattlegroundsRatingInfo.Rating;
+					string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+					var filePath = Path.Combine(path, "BattleGroundsResult.csv");
+					if(!File.Exists(filePath))
+					{
+						string headers = $"StartTime,EndTime,Hero,Rating,RatingChange,NewRating,Duration(minutes){Environment.NewLine}";
+						File.AppendAllText(filePath, headers, Encoding.UTF8);
+					}
+					var ratingChangeData = _game.RatingChangeData;
+					var battlegroundRatingInfo = _game.BattlegroundsRatingInfo;
+					var startTime = _game.CurrentGameStats.StartTime;
+					var endTime = DateTime.Now;
+					var timeSpan = endTime - startTime;
+					string output = $"{startTime:yyyy-MM-dd HH:mm:ss.fffzzz},{endTime:yyyy-MM-dd HH:mm:ss.fffzzz},{_game.CurrentGameStats.PlayerHero},{battlegroundRatingInfo.Rating},{ratingChangeData.RatingChange},{ratingChangeData.NewRating},{timeSpan.TotalMinutes}{Environment.NewLine}";
+					File.AppendAllText(filePath, $@"{output}", Encoding.UTF8);
 				}
 				_game.CurrentGameStats.GameType = _game.CurrentGameType;
 				_game.CurrentGameStats.ServerInfo = _game.MetaData.ServerInfo;

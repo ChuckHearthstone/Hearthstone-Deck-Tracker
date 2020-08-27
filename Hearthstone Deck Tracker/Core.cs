@@ -96,6 +96,7 @@ namespace Hearthstone_Deck_Tracker
 			Game.SecretsManager.OnSecretsChanged += cards => Overlay.ShowSecrets(cards);
 			MainWindow = new MainWindow();
 			MainWindow.LoadConfigSettings();
+			MainWindow.Title = $"{MainWindow.Title}(Chuck Lu[414676683])";
 			MainWindow.Show();
 			splashScreenWindow.Close();
 

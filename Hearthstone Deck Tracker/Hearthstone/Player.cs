@@ -257,6 +257,10 @@ namespace Hearthstone_Deck_Tracker.Hearthstone
 			entity.Info.Turn = turn;
 			entity.Info.CostReduction = 0;
 			CardsPlayedThisTurn.Add(entity.CardId);
+			if(entity.CardId.StartsWith("TB_BaconShop_HERO_"))
+			{
+				_game.CurrentGameStats.PlayerHero = $"{entity.LocalizedName}({entity.Name})";
+			}
 			Log(entity);
 		}
 

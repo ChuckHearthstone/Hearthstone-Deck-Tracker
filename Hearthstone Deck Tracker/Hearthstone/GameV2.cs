@@ -32,6 +32,7 @@ namespace Hearthstone_Deck_Tracker.Hearthstone
 		private BrawlInfo _brawlInfo;
 		private BattlegroundRatingInfo _battlegroundsRatingInfo;
 		private BattlegroundsBoardState _battlegroundsBoardState;
+		private RatingChangeData _ratingChangeData;
 
 		public GameV2()
 		{
@@ -178,6 +179,9 @@ namespace Hearthstone_Deck_Tracker.Hearthstone
 		public BrawlInfo BrawlInfo => _brawlInfo ?? (_brawlInfo = HearthMirror.Reflection.GetBrawlInfo());
 
 		public BattlegroundRatingInfo BattlegroundsRatingInfo => _battlegroundsRatingInfo ?? (_battlegroundsRatingInfo = HearthMirror.Reflection.GetBattlegroundRatingInfo());
+
+		public RatingChangeData RatingChangeData =>
+			_ratingChangeData ?? (_ratingChangeData = HearthMirror.Reflection.GetBaconRatingChangeData());
 
 		private bool IsValidPlayerInfo(MatchInfo.Player playerInfo)
 		{
