@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -545,6 +546,28 @@ namespace Hearthstone_Deck_Tracker
 					var timeSpan = endTime - startTime;
 					string output = $"{startTime:yyyy-MM-dd HH:mm:ss.fffzzz},{endTime:yyyy-MM-dd HH:mm:ss.fffzzz},{_game.CurrentGameStats.PlayerHero},{battlegroundRatingInfo.Rating},{ratingChangeData.RatingChange},{ratingChangeData.NewRating},{timeSpan.TotalMinutes}{Environment.NewLine}";
 					File.AppendAllText(filePath, $@"{output}", Encoding.UTF8);
+
+					System.Type type = typeof(Reflection);
+					PropertyInfo info = type.GetProperty("Mirror", BindingFlags.NonPublic | BindingFlags.Static);
+					dynamic mirror = info?.GetValue(null);
+					if(mirror != null)
+					{
+						var gameState = mirror.Root?["GameState"]["s_instance"];
+						if(gameState != null)
+						{
+							var rank = gameState.Get().GetFriendlySidePlayer().GetHero()
+								.GetRealTimePlayerLeaderboardPlace();
+							File.AppendAllText(filePath, $@"rank = {rank}", Encoding.UTF8);
+						}
+						else
+						{
+							Log.Error("chuck mirror is null");
+						}
+					}
+					else
+					{
+						Log.Error("chuck mirror is null");
+					}
 				}
 				_game.CurrentGameStats.GameType = _game.CurrentGameType;
 				_game.CurrentGameStats.ServerInfo = _game.MetaData.ServerInfo;
