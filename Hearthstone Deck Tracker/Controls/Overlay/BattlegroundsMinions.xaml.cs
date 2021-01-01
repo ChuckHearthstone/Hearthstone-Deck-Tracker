@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Windows.Controls;
 
 namespace Hearthstone_Deck_Tracker.Controls.Overlay
@@ -83,6 +84,7 @@ namespace Hearthstone_Deck_Tracker.Controls.Overlay
 			var unavailableRaces = string.Join(", ", _db.Value.Races.Where(x => !availableRaces.Contains(x) && x != Race.INVALID && x != Race.ALL).Select(x => HearthDbConverter.RaceConverter(x)));
 			UnavailableTypes.UnavailableTypesVisibility = System.Windows.Visibility.Visible;
 			UnavailableTypes.UnavailableRacesText = unavailableRaces;
+			SetUnavailableRacesText(unavailableRaces);
 
 			foreach(var race in _db.Value.Races)
 			{
@@ -112,6 +114,41 @@ namespace Hearthstone_Deck_Tracker.Controls.Overlay
 					Groups.Add(item);
 				}
 			}
+		}
+
+		public static Dictionary<string, string> RaceDictionary = new Dictionary<string, string>
+		{
+			{"Beast", "野兽" },
+			{"Mech","机械"},
+			{"Dragon","龙"},
+			{"Elemental","元素"},
+			{"Demon","恶魔"},
+			{"Murloc","鱼人"}
+		};
+
+		public static string UnavailableRacesText { get; set; }
+
+		public static void SetUnavailableRacesText(string text)
+		{
+			var races = text.Split(',');
+			List<string> list = new List<string>();
+			foreach(var race in races)
+			{
+				var tempRace = race.Trim();
+				string raceTranslation;
+				if(RaceDictionary.ContainsKey(tempRace))
+				{
+					raceTranslation = RaceDictionary[tempRace];
+				}
+				else
+				{
+					raceTranslation = tempRace;
+				}
+				list.Add($"无{raceTranslation}");
+			}
+
+			string str = string.Join(",", list);
+			UnavailableRacesText = str;
 		}
 	}
 }

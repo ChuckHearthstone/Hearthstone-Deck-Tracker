@@ -12,7 +12,10 @@ namespace Hearthstone_Deck_Tracker.Controls.Overlay
 
 		internal void UpdateTurn(int turn)
 		{
-			TurnText.Text = string.Format(LocUtil.Get("Overlay_Battlegrounds_Turn_Counter"), turn);
+			var turnText = string.Format(LocUtil.Get("Overlay_Battlegrounds_Turn_Counter"), turn);
+			var unavailableRacesText = BattlegroundsMinions.UnavailableRacesText;
+			TurnText.Text = $"{turnText} {unavailableRacesText}";
 		}
+
 	}
 }
